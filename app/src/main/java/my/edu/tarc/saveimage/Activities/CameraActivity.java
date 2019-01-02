@@ -69,13 +69,16 @@ public class CameraActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
+
+        progressDialog = new ProgressDialog(this);
+
         imagePreview = (ImageView) findViewById(R.id.imageViewPreview);
 
         // Assume thisActivity is the current activity
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             // Should we show an explanation?
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.READ_CONTACTS)) {
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
 
                 // Show an explanation to the user *asynchronously* -- don't block
                 // this thread waiting for the user's response! After the user
@@ -156,6 +159,11 @@ public class CameraActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+
+            if (!progressDialog.isShowing())
+                progressDialog.setMessage("Upload file to the server...");
+            progressDialog.show();
+
         }
 
         @Override
@@ -174,5 +182,13 @@ public class CameraActivity extends AppCompatActivity {
             return null;
         }
 
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            if (progressDialog.isShowing())
+                progressDialog.dismiss();
+
+            finish();
+        }
     }
 }

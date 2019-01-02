@@ -146,12 +146,15 @@ public class MainActivity extends AppCompatActivity {
         //mPostCommentResponse.requestStarted();
         RequestQueue queue = Volley.newRequestQueue(context);
 
+        if (!progressDialog.isShowing())
+            progressDialog.setMessage("Syn with server...");
+        progressDialog.show();
+
         JsonArrayRequest jsonObjectRequest = new JsonArrayRequest(url,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        if (!progressDialog.isShowing())
-                            progressDialog.show();
+
 
                         try{
                             //Clear list
