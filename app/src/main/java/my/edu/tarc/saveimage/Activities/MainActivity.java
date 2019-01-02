@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -66,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
         listViewImage.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                loadImage(imageArrayList.get(position).getId());
+                showImage(position);
             }
         });
 
@@ -81,6 +82,19 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    private void showImage(int id) {
+
+        byte[] decodedString = Base64.decode(imageArrayList.get(id)
+                .getImage(), Base64.DEFAULT);
+        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString,
+                0, decodedString.length);
+        if (decodedByte != null) {
+            imageViewPreview.setImageBitmap(decodedByte);
+        } else {
+            imageViewPreview.setImageResource(R.drawable.no_image);
+        }
     }
 
     @Override
@@ -127,32 +141,7 @@ public class MainActivity extends AppCompatActivity {
                     Toast.LENGTH_SHORT).show();
         }
     }
-
-    public void initializing() {
-
-    }
-
-    public void loadImage(int id){
-        try {
-            URL url = new URL(getString(R.string.url_get_image) + "?id=" + id);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setDoInput(true);
-            connection.connect();
-            InputStream input = connection.getInputStream();
-            Bitmap myBitmap = BitmapFactory.decodeStream(input);
-            connection.disconnect();
-            if (myBitmap != null) {
-                imageViewPreview.setImageBitmap(myBitmap);
-            } else {
-                imageViewPreview.setImageResource(R.drawable.no_image);
-            }
-        } catch (IOException e) {
-            Toast.makeText(getBaseContext(), "IO Error"+ e.getMessage(), Toast.LENGTH_SHORT).show();
-        } catch (Exception e){
-            Toast.makeText(getBaseContext(), "Error"+ e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
-    }
-
+    
     private void downloadImages(Context context, String url) {
         //mPostCommentResponse.requestStarted();
         RequestQueue queue = Volley.newRequestQueue(context);
@@ -171,11 +160,12 @@ public class MainActivity extends AppCompatActivity {
                             for(int i=0; i < response.length();i++){
                                 JSONObject imageResponse = (JSONObject) response.get(i);
                                 int id = imageResponse.getInt("id");
-                                //String image = imageResponse.getString("image");
+                                String image = imageResponse.getString("image");
 
                                 ImageFile imageFile = new ImageFile();
                                 imageFile.setId(id);
-                                //imageFile.setImage(image);
+                                imageFile.setImage(image);
+                               
 
                                 imageArrayList.add(imageFile);
                             }
