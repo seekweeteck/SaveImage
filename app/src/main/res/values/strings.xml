@@ -3,9 +3,9 @@
     <string name="upload">Upload</string>
     <string name="refresh">Refresh</string>
     <string name="action_settings">Settings</string>
-    <string name="url_get_all_images">http://bait2073.000webhostapp.com/getAllImages.php</string>
-    <string name="url_get_image">http://bait2073.000webhostapp.com/getImage.php</string>
-    <string name="url_insert_image">http://bait2073.000webhostapp.com/insertImage.php</string>
+    <string name="url_get_all_images">http://bait2073.rf.gd/getAllImages.php</string>
+    <string name="url_get_image">http://bait2073.rf.gd/getImage.php</string>
+    <string name="url_insert_image">http://bait2073.rf.gd/insertImage.php</string>
     <string name="url_get_rp_image">https://jinsien-4896.000webhostapp.com/getImageFile.php</string>
     <string name="cam">Camera</string>
 </resources>
